@@ -1,6 +1,6 @@
 // FCAI – OOP Programming – 2023 - Assignment 1
 // Program Name:				filters.cpp
-// Last Modification Date:	15/10/2023
+// Last Modification Date:	/10/2023
 // Author1 and ID and Group:
 // Author2 and ID and Group:
 // Author3 and ID and Group:
@@ -21,8 +21,7 @@ void saveImage ();
 void doSomethingForImage ();
 void black_white();
 void invert_filter();
-void darken_image();
-void lighten_image();
+
 int main()
 {
   loadImage();
@@ -78,10 +77,8 @@ void doSomethingForImage() {
     {cout<<"Do you want to (d)arken or (l)ighten ?";
        char f;
         cin>>f;
-        if(f=='d')
-            darken_image();
-        else if(f=='l')
-           lighten_image();
+
+
     }
 }
 void black_white()
@@ -103,11 +100,4 @@ void invert_filter()
         }
     }
 }
-void darken_image()
-{
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j< SIZE; j++) {
-            image[i][j]=image[i][j]/2;
-        }
-    }
-}
+
