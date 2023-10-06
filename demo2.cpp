@@ -21,6 +21,9 @@ void saveImage ();
 void doSomethingForImage ();
 void black_white();
 void invert_filter();
+void flip_image_horizontally();
+void flip_image_vertically();
+
 
 int main()
 {
@@ -73,8 +76,19 @@ void doSomethingForImage() {
         black_white();
     else if(x=="2")
         invert_filter();
+    else if (x=="4")
+    {
+        cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
+        char f;
+        cin >> f;
+        if (f=='h')
+            flip_image_horizontally();
+        else if (f=='v');
+        flip_image_vertically();
+    }
     else if(x=="5")
-    {cout<<"Do you want to (d)arken or (l)ighten ?";
+    {
+        cout<<"Do you want to (d)arken or (l)ighten ?";
        char f;
         cin>>f;
 
@@ -94,10 +108,39 @@ void black_white()
 }
 void invert_filter()
 {
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j< SIZE; j++) {
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j< SIZE; j++)
+        {
            image[i][j]=255-image[i][j];
         }
     }
+}
+void flip_image_horizontally()
+{
+    int temp =0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j< SIZE/2; j++)
+        {
+            temp = image[i][j];
+            image[i][j]=image[i][255-j];
+            image[i][255-j]=temp;
+        }
+    }
+}
+void flip_image_vertically()
+{
+    int temp =0;
+    for (int i = 0; i < SIZE/2; i++)
+    {
+        for (int j = 0; j< SIZE; j++)
+        {
+            temp = image[i][j];
+            image[i][j]=image[255-i][j];
+            image[255-i][j]=temp;
+        }
+    }
+
 }
 
