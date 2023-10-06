@@ -21,6 +21,8 @@ void saveImage ();
 void doSomethingForImage ();
 void black_white();
 void invert_filter();
+void darken_image();
+void lighten_image();
 int main()
 {
   loadImage();
@@ -72,31 +74,40 @@ void doSomethingForImage() {
         black_white();
     else if(x=="2")
         invert_filter();
-
-
-
+    else if(x=="5")
+    {cout<<"Do you want to (d)arken or (l)ighten ?";
+       char f;
+        cin>>f;
+        if(f=='d')
+            darken_image();
+        else if(f=='l')
+           lighten_image();
+    }
 }
 void black_white()
 {
     for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j< SIZE; j++) {
-
+        for (int j = 0; j < SIZE; j++) {
             if (image[i][j] > 127)
                 image[i][j] = 255;
             else
                 image[i][j] = 0;
-
         }
     }
-
 }
 void invert_filter()
 {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j< SIZE; j++) {
-
            image[i][j]=255-image[i][j];
-
+        }
+    }
+}
+void darken_image()
+{
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j< SIZE; j++) {
+            image[i][j]=image[i][j]/2;
         }
     }
 }
