@@ -15,22 +15,33 @@
 
 using namespace std;
 unsigned char image[SIZE][SIZE];
+unsigned char image1[SIZE][SIZE];
+int n;
 string x;
 void loadImage ();
 void saveImage ();
 void doSomethingForImage ();
 void black_white();
 void invert_filter();
+void rotate_90();
+void rotate_180();
+void rotate_270();
+void  saveImage1();
 void flip_image_horizontally();
 void flip_image_vertically();
-
-
 int main()
 {
   loadImage();
   doSomethingForImage();
   if(x=="0")
       return 0;
+  else if(x=="6")
+  {if(n==90||n==270)
+      { saveImage1();
+          return 0;}
+  }
+    saveImage();
+    return 0;
   saveImage();
   return 0;
 }
@@ -59,6 +70,17 @@ void saveImage () {
    // Add to it .bmp extension and load image
    strcat (imageFileName, ".bmp");
    writeGSBMP(imageFileName, image);
+}
+void saveImage1 () {
+    char imageFileName[100];
+
+    // Get gray scale image target file name
+    cout << "Enter the target image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    writeGSBMP(imageFileName, image1);
 }
 
 //_________________________________________
@@ -93,6 +115,20 @@ void doSomethingForImage() {
         cin>>f;
 
 
+    }
+    if(x=="6")
+    {
+        cout<<"Rotate (90), (180) or (270) degrees? ";
+        cin>>n;
+        if(n==90)
+            rotate_90();
+        else if(n==180)
+            rotate_180();
+        else if(n==270)
+        {
+            rotate_180();
+            rotate_90();
+        }
     }
 }
 void black_white()
@@ -143,4 +179,21 @@ void flip_image_vertically()
     }
 
 }
+void rotate_90()
+{ for (int i = 255; i >=0; i--) {
+        for (int j = 0; j< SIZE; j++) {
+            image1[j][i]=image[255-i][j];
+        }
+    }
 
+}
+void rotate_180()
+{ for (int i = 0; i < SIZE/2; i++) {
+        for (int j = 0; j< SIZE; j++) {
+            int t=image[i][j];
+            image[i][j]=image[255-i][255-j];
+            image[255-i][255-j]=t;
+        }
+    }
+
+}
