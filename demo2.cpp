@@ -105,7 +105,7 @@ void doSomethingForImage() {
         cin >> f;
         if (f=='h')
             flip_image_horizontally();
-        else if (f=='v');
+        else if (f=='v')
         flip_image_vertically();
     }
     else if(x=="5")
