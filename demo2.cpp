@@ -16,8 +16,10 @@
 using namespace std;
 unsigned char image[SIZE][SIZE];
 unsigned char image1[SIZE][SIZE];
+unsigned char imagem[SIZE][SIZE];
 int n;
 string x;
+void loadImage1();
 void loadImage ();
 void saveImage ();
 void doSomethingForImage ();
@@ -29,6 +31,9 @@ void rotate_270();
 void  saveImage1();
 void flip_image_horizontally();
 void flip_image_vertically();
+void light_dark();
+void merge();
+
 int main()
 {
   loadImage();
@@ -58,7 +63,17 @@ void loadImage () {
    strcat (imageFileName, ".bmp");
    readGSBMP(imageFileName, image);
 }
+void loadImage1 () {
+    char imageFileName[100];
 
+    // Get gray scale image file name
+    cout << "Enter the source image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat (imageFileName, ".bmp");
+    readGSBMP(imageFileName, imagem);
+}
 //_________________________________________
 void saveImage () {
    char imageFileName[100];
@@ -98,6 +113,10 @@ void doSomethingForImage() {
         black_white();
     else if(x=="2")
         invert_filter();
+    else if(x=="3")
+    {
+        merge();
+    }
     else if (x=="4")
     {
         cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
@@ -110,13 +129,9 @@ void doSomethingForImage() {
     }
     else if(x=="5")
     {
-        cout<<"Do you want to (d)arken or (l)ighten ?";
-       char f;
-        cin>>f;
-
-
+        light_dark();
     }
-    if(x=="6")
+    else if(x=="6")
     {
         cout<<"Rotate (90), (180) or (270) degrees? ";
         cin>>n;
@@ -130,6 +145,8 @@ void doSomethingForImage() {
             rotate_90();
         }
     }
+
+
 }
 void black_white()
 {
@@ -197,3 +214,39 @@ void rotate_180()
     }
 
 }
+void light_dark() {
+    char x;
+    cout<<"Do you want to (d)arken or (l)ighten ?";
+    cin>>x;
+    if (x== 'l')
+    {for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {int x=255-image [i][j];
+                x=x/2;
+                image [i][j]+=x;
+            }
+        }
+    }
+    else if (x== 'd' )
+    {for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                image [i][j]/=2;
+
+            }
+        }
+    }
+}
+void merge(){
+
+    loadImage1();
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                image[i][j] = image[i][j] / 2 + imagem[i][j] / 2;
+            }
+
+        }
+    }
