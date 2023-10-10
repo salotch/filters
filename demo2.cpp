@@ -31,7 +31,7 @@ void flip_image_horizontally();
 void flip_image_vertically();
 void light_dark();
 void merge();
-
+void Enlarge_image ();
 int main()
 {
   loadImage();
@@ -46,7 +46,7 @@ int main()
           return 0;
       }
   }
-    saveImage();
+   // saveImage();
     return 0;
 }
 
@@ -105,6 +105,9 @@ void doSomethingForImage()
     cout<<"Please select a filter to apply or 0 to exit: \n";
     cout<<"1-Black & White Filter\n"<<"2-Invert Filter\n"<<"3-Merge Filter\n";
     cout<<"4-Flip Image\n"<<"5-Darken and Lighten Image\n"<<"6-Rotate Image\n";
+    cout<<"7-Detect Image Edges\n"<<"8-Enlarge Image\n"<<"9-Shrink Image\n";
+ //   cout<<"a-Mirror 1/2 Image\n"<<"b-Shuffle Image\n"<<"c-Blur Image\n";
+   //  cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
     cout<<"s-Save the image to a file\n"<<"0-Exit\n";
 
     cin>>x; // this variable that make user select no. of filter that he wanted
@@ -118,7 +121,7 @@ void doSomethingForImage()
     }
     else if (x=="4")
     {
-        cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
+        cout << "Do you want to flip (h)horizontally or (v)vertically ?"<<endl;
         char f;
         cin >> f;// make user select h or v
         if (f=='h')
@@ -144,7 +147,10 @@ void doSomethingForImage()
             rotate_90();
         }
     }
+    else if(x=="8")
+    { Enlarge_image();
 
+    }
 
 }
 // this function that turn the photo to black & white.
@@ -230,7 +236,7 @@ void rotate_180()
 // this function contain two function one make photo lighter and other darker.
 void light_dark() {
     char x;
-    cout<<"Do you want to (d)arken or (l)ighten ?";
+    cout<<"Do you want to (d)darken or (l)lighten ?";
     cin>>x; //this variable make user select what he wants to do in photo .
     if (x== 'l')// make photo lighter
     {
@@ -270,3 +276,36 @@ void merge()
 
         }
     }
+
+void Enlarge_image ()
+{//user will choose  one number of the four quarters to enlarge the image into a separate new image.
+    int choice=0,sc=0,sr=0; //sc is for start column ,sr for the start row of the quarter the user have chose
+     do{
+            cout << "Which quarter to enlarge 1, 2, 3 or 4?\n";
+            cin >> choice;
+            if (choice == 2) {
+                sc = 128;
+            } else if (choice == 3) {
+                sr = 128;
+            } else if (choice == 4) {
+                sr = 128;
+                sc = 128;
+            }
+        }while(choice!=1&&choice!=2&&choice!=3&&choice!=4);
+    int k=0,z;//
+    for (int i = sr; i <=sr+127 ; ++i)
+    {
+        z=0;
+        for (int j = sc ; j <= sc+127 ; ++j)
+        {
+        image1[k][z]=image[i][j];
+        image1[k+1][z]=image[i][j];
+        image1[k][z+1]=image[i][j];
+        image1[k+1][z+1]=image[i][j];
+        z+=2;
+        }
+        k+=2;
+    }
+    saveImage1();
+
+}
