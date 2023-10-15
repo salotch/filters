@@ -32,6 +32,7 @@ void flip_image_vertically();
 void light_dark();
 void merge();
 void Enlarge_image ();
+void Shuffle_image();
 int main()
 {
   loadImage();
@@ -106,7 +107,7 @@ void doSomethingForImage()
     cout<<"1-Black & White Filter\n"<<"2-Invert Filter\n"<<"3-Merge Filter\n";
     cout<<"4-Flip Image\n"<<"5-Darken and Lighten Image\n"<<"6-Rotate Image\n";
     cout<<"7-Detect Image Edges\n"<<"8-Enlarge Image\n"<<"9-Shrink Image\n";
- //   cout<<"a-Mirror 1/2 Image\n"<<"b-Shuffle Image\n"<<"c-Blur Image\n";
+    cout<<"a-Mirror 1/2 Image\n"<<"b-Shuffle Image\n"<<"c-Blur Image\n";
    //  cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
     cout<<"s-Save the image to a file\n"<<"0-Exit\n";
 
@@ -151,6 +152,11 @@ void doSomethingForImage()
     { Enlarge_image();
 
     }
+    else if(x=="b"||x=="B")
+    {
+        Shuffle_image();
+    }
+
 
 }
 // this function that turn the photo to black & white.
@@ -235,21 +241,21 @@ void rotate_180()
 }
 // this function contain two function one make photo lighter and other darker.
 void light_dark() {
-    char x;
+    char y;
     cout<<"Do you want to (d)darken or (l)lighten ?";
-    cin>>x; //this variable make user select what he wants to do in photo .
-    if (x== 'l')// make photo lighter
+    cin>>y; //this variable make user select what he wants to do in photo .
+    if (y== 'l')// make photo lighter
     {
         for (int i = 0; i < SIZE; i++)
         {
             for (int j = 0; j < SIZE; j++)
-            {int x=255-image [i][j];
-                x=x/2;
-                image [i][j]+=x;
+            {int y=255-image [i][j];
+                y=y/2;
+                image [i][j]+=y;
             }
         }
     }
-    else if (x== 'd' )//make photo darker.
+    else if (y== 'd' )//make photo darker.
     {
         for (int i = 0; i < SIZE; i++)
         {
@@ -308,5 +314,54 @@ void Enlarge_image ()
         k+=2;
     }
     saveImage1();
-
+}
+void Shuffle_image()
+{
+    cout<<"New order of quarters ? ";
+    int choice[4],n=0;
+    while(n!=4)
+   {
+       cin>>choice[n];
+       if(choice[n]!=1&&choice[n]!=2&&choice[n]!=3&&choice[n]!=4)
+       { cout<<"enter valid values";
+           n=0;
+       }
+      else
+      {
+        n++;
+      }
+   }
+for(int ii=0;3>=ii;ii++)
+{
+    int k,z,sc=0,sr=0;
+    int sr1=0,sc1=0;//for  the index of image1 sc is for start column ,sr for the start row of the quarter the user have chose
+    if(ii==1||ii==3)
+    {
+        sc1=128;
+    }
+    if(ii==2||ii==3)
+    {
+        sr1=128;
+    }
+        if (choice[ii] == 2||choice[ii] == 4)
+        {
+            sc = 128;
+        }
+       if (choice[ii] == 3||choice[ii] == 4)
+        {
+            sr = 128;
+        }
+    k=sr1;
+    for (int i = sr; i <=sr+127 ; ++i)
+    {
+        z=sc1;
+        for (int j = sc ; j <= sc+127 ; ++j)
+        {
+            image1[k][z]=image[i][j];
+        z++;
+        }
+        k++;
+    }
+}
+    saveImage1();
 }
