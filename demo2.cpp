@@ -17,6 +17,7 @@ unsigned char image[SIZE][SIZE];
 unsigned char image1[SIZE][SIZE];
 unsigned char imagem[SIZE][SIZE];
 int n;
+double pi=3.1415927;
 string x;
 void loadImage1();
 void loadImage ();
@@ -33,6 +34,7 @@ void light_dark();
 void merge();
 void Enlarge_image ();
 void Shuffle_image();
+void Skew_Horizontally ();
 int main()
 {
   loadImage();
@@ -47,7 +49,7 @@ int main()
           return 0;
       }
   }
-   // saveImage();
+   saveImage();
     return 0;
 }
 
@@ -155,6 +157,11 @@ void doSomethingForImage()
     else if(x=="b"||x=="B")
     {
         Shuffle_image();
+    }
+    else if(x=="e"||x=="E")
+    {
+        Skew_Horizontally();
+
     }
 
 
@@ -318,17 +325,17 @@ void Enlarge_image ()
 void Shuffle_image()
 {
     cout<<"New order of quarters ? ";
-    int choice[4],n=0;
-    while(n!=4)
+    int choice[4],nn=0;
+    while(nn!=4)
    {
-       cin>>choice[n];
-       if(choice[n]!=1&&choice[n]!=2&&choice[n]!=3&&choice[n]!=4)
+       cin>>choice[nn];
+       if(choice[nn]!=1&&choice[nn]!=2&&choice[nn]!=3&&choice[nn]!=4)
        { cout<<"enter valid values";
-           n=0;
+           nn=0;
        }
       else
       {
-        n++;
+        nn++;
       }
    }
 for(int ii=0;3>=ii;ii++)
@@ -363,5 +370,6 @@ for(int ii=0;3>=ii;ii++)
         k++;
     }
 }
-    saveImage1();
+    n=90;
 }
+
