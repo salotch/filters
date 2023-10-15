@@ -286,6 +286,7 @@ void Enlarge_image ()
             if (choice == 2) {
                 sc = 128;
             } else if (choice == 3) {
+
                 sr = 128;
             } else if (choice == 4) {
                 sr = 128;
