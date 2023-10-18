@@ -40,7 +40,9 @@ void left_mirror();
 void right_mirror();
 void crop_image();
 void edges();
-
+void skew_verticaly();;
+void plur();
+void shrink();
 int main()
 {
   loadImage();
@@ -196,6 +198,12 @@ void doSomethingForImage()
         crop_image();
     else if (x=="7")
         edges();
+    else if(x=="9")
+        shrink();
+    else if (x=="c")
+        plur();
+    else if (x=="f")
+        skew_verticaly();
 }
 // this function that turn the photo to black & white.
 void black_white()
@@ -523,6 +531,69 @@ void edges()
             {
                 image1[i][j]=0;
             }
+        }
+    }
+}
+void plur(){
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+            if ((i-1) !=0&&(j-1)!=0)
+            {image [i][j]=((image [i-1][j-1]+image [i-1][j]+image [i-1][j+1]+image [i][j-1]+image [i][j+1]+image [i+1][j+1]+image [i+1][j]+image[i+1][j+1])/8);
+
+            }
+    }
+}
+
+void shrink() {
+    cout<<"Enter the size you want to shrink to(2 or 3 or 4):";
+    int z;
+    cin >>z;
+    int x=255/(z);
+    int m=255/z;
+
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+
+        {
+            (image[i/z][j/z]) =(image[i][j]);
+        }
+    }
+
+    for (x; x < SIZE; x++) {
+        for ( m = 0; m < SIZE; m++)
+            image[x][m]=255;
+    }
+
+    for (int x = 0; x < SIZE; x++) {
+        for ( m=255/z ; m < SIZE; m++)
+            image[x][m]=255;
+    }
+}
+void Skew_verticaly() {
+    cout << "Please enter degree to skew right:";
+    double angle;
+    cin >> angle;
+    angle = (angle * 22) / (180 * 7);
+    int xx = 256 / (1 + (tan(angle)));//the base of the skew image
+    for (int i = 0; SIZE > i; i++) {
+        for (int j = 0; j < SIZE; ++j) {
+            image1[(i * xx) /SIZE][j] = image[i][j];//(xx)/SIZE is the rate of the new base to old base to shrink the image
+
+        }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; ++j) {
+            image[i][j] = 255;
+        }
+    }
+    double step = SIZE - xx;
+    double move = step / SIZE;
+    {
+        for (int i = 0; i < xx; i++){
+            for (int j = 0; j < SIZE; ++j){
+                image[i + (int) step][j] = image1[i][j];
+            }
+            step -= move;
         }
     }
 }
