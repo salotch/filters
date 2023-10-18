@@ -17,7 +17,6 @@ unsigned char image[SIZE][SIZE];
 unsigned char image1[SIZE][SIZE];
 unsigned char imagem[SIZE][SIZE];
 int n;
-double pi=3.1415927;
 string x;
 void loadImage1();
 void loadImage ();
@@ -288,7 +287,7 @@ void light_dark() {
         for (int i = 0; i < SIZE; i++)
         {
             for (int j = 0; j < SIZE; j++)
-            {int y=255-image [i][j];
+            {int y= 255-image [i][j];
                 y=y/2;
                 image [i][j]+=y;
             }
