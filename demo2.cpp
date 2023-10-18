@@ -523,8 +523,6 @@ void edges()
             {
                 image1[i][j]=0;
             }
-
-
         }
     }
 }
