@@ -35,6 +35,13 @@ void merge();
 void Enlarge_image ();
 void Shuffle_image();
 void Skew_Horizontally ();
+void upper_mirror();
+void lower_mirror();
+void left_mirror();
+void right_mirror();
+void crop_image();
+void edges();
+
 int main()
 {
   loadImage();
@@ -54,6 +61,11 @@ int main()
       saveImage1();
       return 0;
   }
+  else if (x=="7")
+      {
+        saveImage1();
+      return 0;
+      }
    saveImage();
     return 0;
 }
@@ -167,8 +179,24 @@ void doSomethingForImage()
     {
         Skew_Horizontally();
     }
-
-
+    else if (x =="a")
+    {
+        char f;
+        cout<<"Mirror (l)eft, (r)ight, (u)pper, (d)own side?"<<endl;
+        cin>>f;
+        if (f=='u')
+            upper_mirror();
+        else if (f=='d')
+            lower_mirror();
+        else if(f=='l')
+            left_mirror();
+        else if (f=='r')
+            right_mirror();
+    }
+    else if (x=="d")
+        crop_image();
+    else if (x=="7")
+        edges();
 }
 // this function that turn the photo to black & white.
 void black_white()
@@ -407,4 +435,97 @@ for(int i=0;SIZE>i;i++)
         }step-=move;
     }
 
+}
+void upper_mirror()
+{
+    for (int i=127;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            image[i][j]=image[255-i][j];
+        }
+    }
+}
+void lower_mirror()
+{
+    for (int i=0;i<127;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            image[i][j]=image[255-i][j];
+        }
+    }
+}
+void left_mirror()
+{
+    for (int j=127;j<SIZE;j++)
+    {
+        for(int i=0;i<SIZE;i++)
+        {
+            image[i][j]=image[i][255-j];
+        }
+    }
+}
+void right_mirror()
+{
+    for (int j=0;j<127;j++)
+    {
+        for(int i=0;i<SIZE;i++)
+        {
+            image[i][j]=image[i][255-j];
+        }
+    }
+}
+void crop_image()
+{
+    int x,y,l,w;
+    cout<< "Please Enter x & y the postion you want and Enter length and width:"<<endl;
+    cout<<"Enter x: "<<endl;
+    cin>>x;
+    cout<<"Enter y: "<<endl;
+    cin>>y;
+    cout<<"Enter length: "<<endl;
+    cin>>l;
+    cout<<"Enter width: "<<endl;
+    cin>>w;
+    for (int i=0;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            if (((i >= x) && (i <= x + l)) && (j >= y && (j <= y + w)))
+                continue;
+            else
+                image[i][j]=255;
+        }
+    }
+}
+void edges()
+{
+    int  t = 0;
+    for (int i=0;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            image1[i][j]=255;
+            t += image[i][j];
+        }
+    }
+    t /= (256*256);
+
+    for (int i=0;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            if ( image[i][j]>t && (image [i][j-1]<t || image[i][j+1]<t || image[i-1][j]<t || image[i+1][j]<t))
+            {
+                image1[i][j]=0;
+            }
+            if ( image[i][j]<t && (image [i][j-1]>t || image[i][j+1]>t || image[i-1][j]>t || image[i+1][j]>t))
+            {
+                image1[i][j]=0;
+            }
+
+
+        }
+    }
 }
