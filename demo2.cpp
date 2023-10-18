@@ -40,7 +40,7 @@ void left_mirror();
 void right_mirror();
 void crop_image();
 void edges();
-void skew_verticaly();;
+void Skew_verticaly();;
 void plur();
 void shrink();
 int main()
@@ -203,7 +203,7 @@ void doSomethingForImage()
     else if (x=="c")
         plur();
     else if (x=="f")
-        skew_verticaly();
+        Skew_verticaly();
 }
 // this function that turn the photo to black & white.
 void black_white()
