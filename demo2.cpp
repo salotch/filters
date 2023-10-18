@@ -49,6 +49,11 @@ int main()
           return 0;
       }
   }
+  else if(x=="8")
+  {
+      saveImage1();
+      return 0;
+  }
    saveImage();
     return 0;
 }
@@ -105,14 +110,14 @@ void saveImage1 ()
 // This function we called it in main to make user select filter that he wanted and call the function of the filter.
 void doSomethingForImage()
 {
-    cout<<"Please select a filter to apply or 0 to exit: \n";
+
     cout<<"1-Black & White Filter\n"<<"2-Invert Filter\n"<<"3-Merge Filter\n";
     cout<<"4-Flip Image\n"<<"5-Darken and Lighten Image\n"<<"6-Rotate Image\n";
     cout<<"7-Detect Image Edges\n"<<"8-Enlarge Image\n"<<"9-Shrink Image\n";
     cout<<"a-Mirror 1/2 Image\n"<<"b-Shuffle Image\n"<<"c-Blur Image\n";
-   //  cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
+     cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
     cout<<"s-Save the image to a file\n"<<"0-Exit\n";
-
+    cout<<"Please select a filter to apply or 0 to exit: ";
     cin>>x; // this variable that make user select no. of filter that he wanted
     if(x=="1")
         black_white();
@@ -161,7 +166,6 @@ void doSomethingForImage()
     else if(x=="e"||x=="E")
     {
         Skew_Horizontally();
-
     }
 
 
@@ -320,7 +324,7 @@ void Enlarge_image ()
         }
         k+=2;
     }
-    saveImage1();
+
 }
 void Shuffle_image()
 {
@@ -372,4 +376,35 @@ for(int ii=0;3>=ii;ii++)
 }
     n=90;
 }
+void Skew_Horizontally()
+{cout<<"Please enter degree to skew right:";
+    double angle;
+cin>>angle;
+angle=(angle*22)/(180*7);
+int xx = 256 / ( 1 + ( 1 / tan(angle) ) );//the base of the skew image
+for(int i=0;SIZE>i;i++)
+{
+    for (int j = 0; j < SIZE ; ++j)
+    {
+       image1[i][(j*xx)/SIZE]=image[i][j];//(xx)/SIZE is the rate of the new base to old base to shrink the image
 
+    }
+}
+   for(int i=0;i<SIZE;i++)
+    {
+        for (int j = 0; j < SIZE; ++j)
+        {
+            image[i][j]=255;
+        }
+    }
+    double step=SIZE-xx;
+    double move=step/SIZE;
+    for(int i=0;i<SIZE;i++)
+    {
+        for (int j = 0 ; j < xx; ++j)
+        {
+           image[i][j+(int)step]= image1[i][j];
+        }step-=move;
+    }
+
+}
