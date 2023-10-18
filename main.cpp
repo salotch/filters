@@ -23,11 +23,12 @@ void black_white();
 void merge();
 void enlarge();
 void Shuffle_image ();
+void Skew_Horizontally();
 int main()
 {
     loadImage();
     doSomethingForImage();
-    saveImage1();
+    saveImage();
     return 0;
 }
 
@@ -96,6 +97,8 @@ void doSomethingForImage() {
          enlarge();
     else if(x=="b"||x=="B")
         Shuffle_image();
+    else if(x=="e"||x=="E")
+        Skew_Horizontally();
 }
 void black_white()
 {
@@ -237,6 +240,43 @@ void Shuffle_image()
             l++;
         }
         }
+    }
+
+}
+void Skew_Horizontally()
+{cout<<"Please enter degree to skew right:";
+    double angle;
+    cin>>angle;
+    angle=(angle*22)/(180*7);
+    int xx = 256 / ( 1 + ( 1 / tan(angle) ) );//the base of the skew image
+    for (int k = 0; k <RGB ; ++k)
+        for(int i=0;SIZE>i;i++)
+        {
+            for (int j = 0; j < SIZE ; ++j)
+            {
+                image1[i][(j*xx)/SIZE][k]=image[i][j][k];//(xx)/SIZE is the rate of the new base to old base to shrink the image
+
+            }
+        }
+    for (int k = 0; k <RGB ; ++k)
+        for(int i=0;i<SIZE;i++)
+        {
+            for (int j = 0; j < SIZE; ++j)
+            {
+                image[i][j][k]=255;
+            }
+        }
+    double step=SIZE-xx;
+    double move=step/SIZE;
+
+    for(int i=0;i<SIZE;i++)
+    {
+        for (int j = 0 ; j < xx; ++j)
+        {
+            for (int k = 0; k <RGB ; ++k)
+                image[i][j+(int)step][k]= image1[i][j][k];
+        }
+        step-=move;
     }
 
 }
