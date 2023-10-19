@@ -4,7 +4,6 @@
 
 #ifndef FUNC_NAME_H
 #define FUNC_NAME_H
-
 void loadImage1();
 void loadImage ();
 void saveImage ();
@@ -12,7 +11,6 @@ void doSomethingForImage ();
 void black_white();
 void invert_filter();
 void rotate_90();
-void  saveImage1();
 void flip_image_horizontally();
 void flip_image_vertically();
 void light_dark();

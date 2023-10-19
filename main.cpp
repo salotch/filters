@@ -7,28 +7,23 @@
 #include <cmath>
 #include "bmplib.cpp"
 #include "func_name.h"
-
 using namespace std;
 unsigned char image[SIZE][SIZE][RGB];
 unsigned char image1[SIZE][SIZE][RGB];
-unsigned char imagem[SIZE][SIZE][RGB];
+
 int n;
-string x;
-
-
+bool EXIT=false;
+bool SAVE=true;
 int main()
 {
     loadImage();
-    doSomethingForImage();
-    if (x=="7")
-    {
-        saveImage1();
-        return(0);
-    }
+    do {
+        doSomethingForImage();
+    }while(SAVE);
+    if(EXIT)
+        return 0;
     saveImage();
-    return 0;
 }
-
 //_________________________________________
 void loadImage () {
     char imageFileName[100];
@@ -63,17 +58,7 @@ void saveImage () {
     strcat (imageFileName, ".bmp");
     writeRGBBMP(imageFileName, image);
 }
-void saveImage1 () {
-    char imageFileName[100];
 
-    // Get colour scale image target file name
-    cout << "Enter the target image file name: ";
-    cin >> imageFileName;
-
-    // Add to it .bmp extension and load image
-    strcat (imageFileName, ".bmp");
-    writeRGBBMP(imageFileName, image1);
-}
 void doSomethingForImage() {
     cout<<"1-Black & White Filter\n"<<"2-Invert Filter\n"<<"3-Merge Filter\n";
     cout<<"4-Flip Image\n"<<"5-Darken and Lighten Image\n"<<"6-Rotate Image\n";
@@ -82,6 +67,7 @@ void doSomethingForImage() {
     cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
     cout<<"s-Save the image to a file\n"<<"0-Exit\n";
     cout<<"Please select a filter to apply or 0 to exit: ";
+    string x;
     cin>>x;
     if(x=="1")
         black_white();
@@ -107,6 +93,8 @@ void doSomethingForImage() {
             rotate_90();
         }
     }
+    else if(x=="7")
+         edges();
     else if(x=="8")
         Enlarge_image();
     else if(x=="b"||x=="B")
@@ -115,8 +103,12 @@ void doSomethingForImage() {
         Skew_Horizontally();
     else if(x=="f"||x=="F")
         Skew_Vertically();
-    else if(x=="c"||x=="C")
-         blur();
+    else if(x=="c"||x=="C") {
+        blur();
+        blur();
+        blur();
+        blur();
+    }
     else if(x=="9")
        shrink();
     if(x=="5")
@@ -149,6 +141,12 @@ void doSomethingForImage() {
         crop_image();
     else if (x=="7")
         edges();
+    else if(x=="s"||x=="S")
+    {
+        SAVE=false;
+    }
+    else if(x=="0")
+        EXIT=true;
 }
 void black_white()
 {
@@ -223,6 +221,14 @@ void Enlarge_image()
         }
     }while(choice!=1&&choice!=2&&choice!=3&&choice!=4);
     //
+    for (int i = 0; i <SIZE ; ++i) {
+        for (int j = 0; j <SIZE ; ++j) {
+            for (int k = 0; k < RGB; ++k)
+            {
+                image1[i][j][k]=image[i][j][k];//copy image to image 1
+            }
+        }
+    }
     for (int k = 0; k < RGB; ++k) {
         int l=0,z;
         for (int i = sr; i <= sr + 127; ++i) {
@@ -230,10 +236,10 @@ void Enlarge_image()
             for (int j = sc; j <= sc + 127; ++j) {
 
 
-                image1[l][z][k] = image[i][j][k];
-                image1[l + 1][z][k] = image[i][j][k];
-                image1[l][z + 1][k] = image[i][j][k];
-                image1[l + 1][z + 1][k] = image[i][j][k];
+                image[l][z][k] = image1[i][j][k];
+                image[l + 1][z][k] = image1[i][j][k];
+                image[l][z + 1][k] = image1[i][j][k];
+                image[l + 1][z + 1][k] = image1[i][j][k];
                 z += 2;
             }
             l += 2;
@@ -289,6 +295,13 @@ void Shuffle_image()
             }
             l++;
         }
+        }
+    }
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            for (int k = 0; k < RGB; ++k) {
+                image[i][j][k]=image1[i][j][k];
+            }
         }
     }
 
@@ -372,22 +385,6 @@ void blur(){
             }
     }
 
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++)
-          for(int k=0;k<RGB;k++)
-                if ((i-1)>0&&(j-1)>0)
-               {
-                    image [i][j][k]=((image [i-1][j-1][k]+image [i-1][j][k]+image [i-1][j+1][k]+image [i][j-1][k]+image [i][j+1][k]+image [i+1][j+1][k]+image [i+1][j][k]+image[i+1][j+1][k])/8);
-             }
-    }
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++)
-            for(int k=0;k<RGB;k++)
-                if ((i-1)>0&&(j-1)>0)
-                {
-                    image [i][j][k]=((image [i-1][j-1][k]+image [i-1][j][k]+image [i-1][j+1][k]+image [i][j-1][k]+image [i][j+1][k]+image [i+1][j+1][k]+image [i+1][j][k]+image[i+1][j+1][k])/8);
-                }
-    }
 }
 void shrink() {
     cout<<"choose the size you want to shrink \n" << "1- for 1/2 \n" <<  "2- for 1/3\n" << "3- for 1/4 :";
@@ -589,24 +586,30 @@ void crop_image()
         }
     }
 }
-void edges()
-{
 
-    black_white();
+void edges() {
 
-    for (int i=0;i<SIZE;i++)
-    {
-        for(int j=0;j<SIZE;j++)
-        {
-            for (int k=0;k<RGB;k++) {
-                if (image[i][j-1][k] != image[i][j + 1][k]  || image[i-1][j ][k]  != image[i + 1][j][k])
-                {
-                    image1[i][j][k] = 0;
+    for (int i = 0; i < SIZE; ++i) {
+        for (int j = 0; j < SIZE; ++j) {
+            for (int k = 0; k < RGB; ++k) {
+                image1[i][j][k] = image[i][j][k];//copy image to image 1
+                image[i][j][k] =255;
+            }
+        }
+    }
+    for (int i = 0; i < SIZE ; i++) {
+        for (int j = 0; j < SIZE ; j++) {
+            for (int k = 0; k < RGB; k++) {
+                for (int l = -1; l <= 1; ++l) {
+                    for (int m = -1; m <= 1; ++m) {
+                        if ((image1[i][j][k] - image1[i + l][j + m][k]) >= 30)
+                            image[i][j][k] = 0;
+
+                    }
                 }
 
             }
-
-
         }
     }
+black_white();
 }
