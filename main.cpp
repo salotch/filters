@@ -6,32 +6,25 @@
 #include <cstring>
 #include <cmath>
 #include "bmplib.cpp"
+#include "func_name.h"
 
 using namespace std;
 unsigned char image[SIZE][SIZE][RGB];
 unsigned char image1[SIZE][SIZE][RGB];
 unsigned char imagem[SIZE][SIZE][RGB];
-void loadImage ();
-void loadImage1();
-void saveImage ();
-void saveImage1 ();
-void doSomethingForImage ();
-void invert();
 int n;
 string x;
-void black_white();
-void merge();
-void enlarge();
-void Shuffle_image ();
-void Skew_Horizontally();
-void Skew_Vertically();
-void blur();
-void shrink();
-void rotate_90();
+
+
 int main()
 {
     loadImage();
     doSomethingForImage();
+    if (x=="7")
+    {
+        saveImage1();
+        return(0);
+    }
     saveImage();
     return 0;
 }
@@ -93,7 +86,7 @@ void doSomethingForImage() {
     if(x=="1")
         black_white();
     else if(x=="2")
-        invert();
+        invert_filter();
     else if(x=="3")
         merge();
     else if(x=="6")
@@ -115,7 +108,7 @@ void doSomethingForImage() {
         }
     }
     else if(x=="8")
-         enlarge();
+        Enlarge_image();
     else if(x=="b"||x=="B")
         Shuffle_image();
     else if(x=="e"||x=="E")
@@ -126,6 +119,36 @@ void doSomethingForImage() {
          blur();
     else if(x=="9")
        shrink();
+    if(x=="5")
+        light_dark();
+    else if (x =="a")
+    {
+        char f;
+        cout<<"Mirror (l)eft, (r)ight, (u)pper, (d)own side?"<<endl;
+        cin>>f;
+        if (f=='u')
+            upper_mirror();
+        else if (f=='d')
+            lower_mirror();
+        else if(f=='l')
+            left_mirror();
+        else if (f=='r')
+            right_mirror();
+    }
+    else if (x=="4")
+    {
+        cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
+        char f;
+        cin >> f;
+        if (f=='h')
+            flip_image_horizontally();
+        else if (f=='v')
+            flip_image_vertically();
+    }
+    else if (x=="d")
+        crop_image();
+    else if (x=="7")
+        edges();
 }
 void black_white()
 {
@@ -153,7 +176,7 @@ void black_white()
         }
     }
 }
-void invert()
+void invert_filter()
 {
     for(int i=0;i<SIZE;i++)
     {
@@ -183,7 +206,7 @@ void merge()
         }
     }
 }
-void enlarge()
+void Enlarge_image()
 {//user will choose  one number of the four quarters to enlarge the image into a separate new image.
     int choice=0,sc=0,sr=0; //sc is for start column ,sr for the start row of the quarter the user have chose
     do{
@@ -424,4 +447,166 @@ void rotate_90()
         }
     }
 
+}
+void light_dark()
+{
+    char x;
+    cout<<"Do you want to (d)arken or (l)ighten ?";
+    cin>>x;
+    if (x== 'l')
+    {
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                for(int k=0;k<RGB;k++)
+                {
+                    int x = 255 - image[i][j][k];
+                    x = x / 2;
+                    image[i][j][k] += x;
+                }
+            }
+        }
+    }
+    else if (x== 'd' )
+    {
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                for(int k=0;k<RGB;k++) {
+
+                    image[i][j][k] /= 2;
+                }
+
+            }
+        }
+    }
+
+}
+void upper_mirror()
+{
+    for (int i=127;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            for(int k=0;k<RGB;k++) {
+                image[i][j][k] = image[255 - i][j][k];
+            }
+        }
+    }
+}
+void lower_mirror()
+{
+    for (int i=0;i<127;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            for(int k=0;k<RGB;k++) {
+
+                image[i][j][k] = image[255 - i][j][k];
+            }
+        }
+    }
+}
+void left_mirror()
+{
+    for (int j=127;j<SIZE;j++)
+    {
+        for(int i=0;i<SIZE;i++)
+        {
+            for(int k=0;k<RGB;k++) {
+                image[i][j][k] = image[i][255 - j][k];
+            }
+        }
+    }
+}
+void right_mirror()
+{
+    for (int j=0;j<127;j++)
+    {
+        for(int i=0;i<SIZE;i++)
+        {
+            for(int k=0;k<RGB;k++) {
+                image[i][j][k] = image[i][255 - j][k];
+            }
+        }
+    }
+}
+void flip_image_horizontally()
+{
+    int temp =0;
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j< SIZE/2; j++)
+        {
+            for (int k=0;k<RGB;++k) {
+                temp = image[i][j][k];
+                image[i][j][k] = image[i][255 - j][k];
+                image[i][255 - j][k] = temp;
+            }
+        }
+    }
+}
+void flip_image_vertically()
+{
+    int temp =0;
+    for (int i = 0; i < SIZE/2; i++)
+    {
+        for (int j = 0; j< SIZE; j++)
+        {
+            for(int k=0;k<RGB;k++) {
+                temp = image[i][j][k];
+                image[i][j][k] = image[255 - i][j][k];
+                image[255 - i][j][k] = temp;
+            }
+        }
+    }
+
+}
+void crop_image()
+{
+    int x,y,l,w;
+    cout<< "Please Enter x & y the postion you want and Enter length and width:"<<endl;
+    cout<<"Enter x: "<<endl;
+    cin>>x;
+    cout<<"Enter y: "<<endl;
+    cin>>y;
+    cout<<"Enter length: "<<endl;
+    cin>>l;
+    cout<<"Enter width: "<<endl;
+    cin>>w;
+    for (int i=0;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            for (int k=0;k<RGB;++k) {
+                if (((i >= x) && (i <= x + l)) && (j >= y && (j <= y + w)))
+                    continue;
+                else
+                    image[i][j][k] = 255;
+            }
+        }
+    }
+}
+void edges()
+{
+
+    black_white();
+
+    for (int i=0;i<SIZE;i++)
+    {
+        for(int j=0;j<SIZE;j++)
+        {
+            for (int k=0;k<RGB;k++) {
+                if (image[i][j-1][k] != image[i][j + 1][k]  || image[i-1][j ][k]  != image[i + 1][j][k])
+                {
+                    image1[i][j][k] = 0;
+                }
+
+            }
+
+
+        }
+    }
 }

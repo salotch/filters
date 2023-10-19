@@ -11,6 +11,7 @@
 #include <cstring>
 #include <cmath>
 #include "bmplib.cpp"
+#include "func_name.h"
 
 using namespace std;
 unsigned char image[SIZE][SIZE];
@@ -18,30 +19,7 @@ unsigned char image1[SIZE][SIZE];
 unsigned char imagem[SIZE][SIZE];
 int n;
 string x;
-void loadImage1();
-void loadImage ();
-void saveImage ();
-void doSomethingForImage ();
-void black_white();
-void invert_filter();
-void rotate_90();
-void  saveImage1();
-void flip_image_horizontally();
-void flip_image_vertically();
-void light_dark();
-void merge();
-void Enlarge_image ();
-void Shuffle_image();
-void Skew_Horizontally ();
-void upper_mirror();
-void lower_mirror();
-void left_mirror();
-void right_mirror();
-void crop_image();
-void edges();
-void Skew_Vertically();
-void blur();
-void shrink();
+
 int main()
 {
   loadImage();
