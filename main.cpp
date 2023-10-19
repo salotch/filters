@@ -24,6 +24,10 @@ void merge();
 void enlarge();
 void Shuffle_image ();
 void Skew_Horizontally();
+void Skew_Vertically();
+void blur();
+void shrink();
+void rotate_90();
 int main()
 {
     loadImage();
@@ -78,14 +82,13 @@ void saveImage1 () {
     writeRGBBMP(imageFileName, image1);
 }
 void doSomethingForImage() {
-    cout<<"Please select a filter to apply or 0 to exit: \n";
     cout<<"1-Black & White Filter\n"<<"2-Invert Filter\n"<<"3-Merge Filter\n";
     cout<<"4-Flip Image\n"<<"5-Darken and Lighten Image\n"<<"6-Rotate Image\n";
     cout<<"7-Detect Image Edges\n"<<"8-Enlarge Image\n"<<"9-Shrink Image\n";
     cout<<"a-Mirror 1/2 Image\n"<<"b-Shuffle Image\n"<<"c-Blur Image\n";
     cout<<"d-Crop Image\n"<<"e-Skew Image Right\n"<<"f-Skew Image Up\n";
     cout<<"s-Save the image to a file\n"<<"0-Exit\n";
-
+    cout<<"Please select a filter to apply or 0 to exit: ";
     cin>>x;
     if(x=="1")
         black_white();
@@ -93,12 +96,36 @@ void doSomethingForImage() {
         invert();
     else if(x=="3")
         merge();
+    else if(x=="6")
+    {
+        cout<<"Rotate (90), (180) or (270) degrees? ";
+        cin>>n; // user select the degree of rotate that he want to happen in photo.
+        if(n==90)
+            rotate_90();
+        else if(n==180)// we call function rotate 90 two times 90*2=180
+        { rotate_90();
+            rotate_90();
+
+        }
+        else if(n==270) // we call function rotate 90 three times 90*3=270
+        {
+            rotate_90();
+            rotate_90();
+            rotate_90();
+        }
+    }
     else if(x=="8")
          enlarge();
     else if(x=="b"||x=="B")
         Shuffle_image();
     else if(x=="e"||x=="E")
         Skew_Horizontally();
+    else if(x=="f"||x=="F")
+        Skew_Vertically();
+    else if(x=="c"||x=="C")
+         blur();
+    else if(x=="9")
+       shrink();
 }
 void black_white()
 {
@@ -277,6 +304,124 @@ void Skew_Horizontally()
                 image[i][j+(int)step][k]= image1[i][j][k];
         }
         step-=move;
+    }
+
+}
+void Skew_Vertically() {
+
+    cout << "Please enter degree to skew right: ";
+    double angle;
+    cin >> angle;
+    angle = (angle * 22) / (180 * 7);
+    int xx = 256 / (1 + (tan(angle)));//the base of the skew image
+    for(int k=0;k<RGB;k++)
+    for (int i = 0; SIZE > i; i++) {
+        for (int j = 0; j < SIZE; ++j) {
+            image1[(i * xx) /SIZE][j] [k]= image[i][j][k];//(xx)/SIZE is the rate of the new base to old base to shrink the image
+
+        }
+    }
+    for(int k=0;k<RGB;k++)
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; ++j) {
+            image[i][j][k] = 255;
+        }
+    }
+    double step = SIZE - xx;
+    double move = step / SIZE;
+    for(int j=0;j<SIZE;j++)
+    {
+        for (int i = 0 ; i < xx; ++i)
+        {
+            for (int k = 0; k <RGB ; ++k)
+                image[i+(int)step][j][k]= image1[i][j][k];
+        }
+        step-=move;
+    }
+}
+void blur(){
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+            for(int k=0;k<RGB;k++)
+            if ((i-1)>0&&(j-1)>0)
+            {
+                image [i][j][k]=((image [i-1][j-1][k]+image [i-1][j][k]+image [i-1][j+1][k]+image [i][j-1][k]+image [i][j+1][k]+image [i+1][j+1][k]+image [i+1][j][k]+image[i+1][j+1][k])/8);
+            }
+    }
+
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+          for(int k=0;k<RGB;k++)
+                if ((i-1)>0&&(j-1)>0)
+               {
+                    image [i][j][k]=((image [i-1][j-1][k]+image [i-1][j][k]+image [i-1][j+1][k]+image [i][j-1][k]+image [i][j+1][k]+image [i+1][j+1][k]+image [i+1][j][k]+image[i+1][j+1][k])/8);
+             }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+            for(int k=0;k<RGB;k++)
+                if ((i-1)>0&&(j-1)>0)
+                {
+                    image [i][j][k]=((image [i-1][j-1][k]+image [i-1][j][k]+image [i-1][j+1][k]+image [i][j-1][k]+image [i][j+1][k]+image [i+1][j+1][k]+image [i+1][j][k]+image[i+1][j+1][k])/8);
+                }
+    }
+}
+void shrink() {
+    cout<<"choose the size you want to shrink \n" << "1- for 1/2 \n" <<  "2- for 1/3\n" << "3- for 1/4 :";
+    int z;
+    cin >>z;
+    z++;
+    int x=256/z;
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            for (int k = 0; k < RGB; ++k)
+            {
+            image[i/z][j/z][k] =image[i][j][k];
+            }
+        }
+    }
+    for (int i=x; i < SIZE; i++)//to make the rest of the image white
+    {
+        for (int j=0 ; j < SIZE; j++)
+        {
+            for (int k = 0; k < RGB; ++k)
+        {
+                image[i][j][k] = 255;
+        }
+        }
+    }
+    for (int i = 0; i < SIZE; i++)//to make the rest of the image white
+    {
+        for (int j = 255 / z; j < SIZE; j++)
+        {
+            for (int k = 0; k < RGB; ++k)
+            {
+                image[i][j][k] = 255;
+            }
+        }
+    }
+}
+void rotate_90()
+{
+    for (int i = 0; i <SIZE ; ++i) {
+        for (int j = 0; j <SIZE ; ++j) {
+            for (int k = 0; k < RGB; ++k)
+            {
+            image1[i][j][k]=image[i][j][k];
+            }
+        }
+    }
+
+    for (int i = 255; i >=0; i--)
+    {
+        for (int j = 0; j< SIZE; j++) {
+            for (int k = 0; k < RGB; ++k) {
+                image[j][i][k] = image1[255 - i][j][k];
+            }
+        }
     }
 
 }

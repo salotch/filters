@@ -25,7 +25,6 @@ void doSomethingForImage ();
 void black_white();
 void invert_filter();
 void rotate_90();
-void rotate_180();
 void  saveImage1();
 void flip_image_horizontally();
 void flip_image_vertically();
@@ -40,8 +39,8 @@ void left_mirror();
 void right_mirror();
 void crop_image();
 void edges();
-void Skew_verticaly();;
-void plur();
+void Skew_Vertically();
+void blur();
 void shrink();
 int main()
 {
@@ -49,14 +48,7 @@ int main()
   doSomethingForImage();
   if(x=="0")
       return 0;
-  else if(x=="6")
-  {
-      if(n==90||n==270)
-      {
-          saveImage1();
-          return 0;
-      }
-  }
+
   else if(x=="8")
   {
       saveImage1();
@@ -67,8 +59,9 @@ int main()
         saveImage1();
       return 0;
       }
-   saveImage();
-    return 0;
+  else
+  { saveImage();
+    return 0;}
 }
 
 //Make user enter photo that he want to modify it.
@@ -145,9 +138,9 @@ void doSomethingForImage()
         cout << "Do you want to flip (h)horizontally or (v)vertically ?"<<endl;
         char f;
         cin >> f;// make user select h or v
-        if (f=='h')
+        if (f=='h'||f=='H')
             flip_image_horizontally();
-        else if (f=='v')
+        else if (f=='v'||f=='V')
         flip_image_vertically();
     }
     else if(x=="5")
@@ -160,11 +153,15 @@ void doSomethingForImage()
         cin>>n; // user select the degree of rotate that he want to happen in photo.
         if(n==90)
             rotate_90();
-        else if(n==180)
-            rotate_180();
-        else if(n==270) // we call function rotate 180 and rotate 90.
+        else if(n==180)// we call function rotate 90 two times 90*2=180
+        { rotate_90();
+            rotate_90();
+
+        }
+        else if(n==270) // we call function rotate 90 three times 90*3=270
         {
-            rotate_180();
+            rotate_90();
+            rotate_90();
             rotate_90();
         }
     }
@@ -180,30 +177,31 @@ void doSomethingForImage()
     {
         Skew_Horizontally();
     }
-    else if (x =="a")
+    else if (x =="a"||x=="A")
     {
         char f;
         cout<<"Mirror (l)eft, (r)ight, (u)pper, (d)own side?"<<endl;
         cin>>f;
-        if (f=='u')
+        if (f=='u'||f=='U')
             upper_mirror();
-        else if (f=='d')
+        else if (f=='d'||f=='D')
             lower_mirror();
-        else if(f=='l')
+        else if(f=='l'||f=='L')
             left_mirror();
-        else if (f=='r')
+        else if (f=='r'||f=='R')
             right_mirror();
     }
-    else if (x=="d")
+    else if (x=="d"||x=="D")
         crop_image();
     else if (x=="7")
         edges();
     else if(x=="9")
         shrink();
-    else if (x=="c")
-        plur();
-    else if (x=="f")
-        Skew_verticaly();
+    else if (x=="c"||x=="C")
+        blur();
+    else if (x=="f"||x=="F")
+        Skew_Vertically();
+
 }
 // this function that turn the photo to black & white.
 void black_white()
@@ -262,29 +260,22 @@ void flip_image_vertically()
 // this filter rotate photo 90 degree.
 void rotate_90()
 {
+    for (int i = 0; i <SIZE ; ++i) {
+        for (int j = 0; j <SIZE ; ++j) {
+            image1[i][j]=image[i][j];
+        }
+    }
+
     for (int i = 255; i >=0; i--)
     {
         for (int j = 0; j< SIZE; j++)
         {
-            image1[j][i]=image[255-i][j];
+            image[j][i]=image1[255-i][j];
         }
     }
 
 }
-// this filter rotate photo 180 degree.
-void rotate_180()
-{
-    for (int i = 0; i < SIZE/2; i++)
-    {
-        for (int j = 0; j< SIZE; j++)
-        {
-            int t=image[i][j];
-            image[i][j]=image[255-i][255-j];
-            image[255-i][255-j]=t;
-        }
-    }
 
-}
 // this function contain two function one make photo lighter and other darker.
 void light_dark() {
     char y;
@@ -412,7 +403,7 @@ for(int ii=0;3>=ii;ii++)
     n=90;
 }
 void Skew_Horizontally()
-{cout<<"Please enter degree to skew right:";
+{cout<<"Please enter degree to skew right :";
     double angle;
 cin>>angle;
 angle=(angle*22)/(180*7);
@@ -534,10 +525,17 @@ void edges()
         }
     }
 }
-void plur(){
+void blur(){
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++)
-            if ((i-1) !=0&&(j-1)!=0)
+            if ((i-1)>0&&(j-1)>0)
+            {image [i][j]=((image [i-1][j-1]+image [i-1][j]+image [i-1][j+1]+image [i][j-1]+image [i][j+1]+image [i+1][j+1]+image [i+1][j]+image[i+1][j+1])/8);
+
+            }
+    }
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++)
+            if ((i-1)>0&&(j-1)>0)
             {image [i][j]=((image [i-1][j-1]+image [i-1][j]+image [i-1][j+1]+image [i][j-1]+image [i][j+1]+image [i+1][j+1]+image [i+1][j]+image[i+1][j+1])/8);
 
             }
@@ -545,32 +543,37 @@ void plur(){
 }
 
 void shrink() {
-    cout<<"Enter the size you want to shrink to(2 or 3 or 4):";
+    cout<<"choose the size you want to shrink \n" << "1- for 1/2 \n" <<  "2- for 1/3\n" << "3- for 1/4 :";
     int z;
     cin >>z;
-    int x=255/(z);
-    int m=255/z;
+    z++;
+    int x=256/z;
 
-    for (int i = 0; i < SIZE; i++) {
+
+    for (int i = 0; i < SIZE; i++)
+    {
         for (int j = 0; j < SIZE; j++)
-
         {
-            (image[i/z][j/z]) =(image[i][j]);
+            image[i/z][j/z] =image[i][j];
         }
     }
-
-    for (x; x < SIZE; x++) {
-        for ( m = 0; m < SIZE; m++)
-            image[x][m]=255;
+    for (int i=x; i < SIZE; i++)//to make the rest of the image white
+    {
+        for (int j=0 ; j < SIZE; j++)
+        {
+            image[i][j]=255;
+        }
     }
-
-    for (int x = 0; x < SIZE; x++) {
-        for ( m=255/z ; m < SIZE; m++)
-            image[x][m]=255;
+    for (int i = 0; i < SIZE; i++)//to make the rest of the image white
+    {
+        for (int j = 255 / z; j < SIZE; j++)
+        {
+            image[i][j] = 255;
+        }
     }
 }
-void Skew_verticaly() {
-    cout << "Please enter degree to skew right:";
+void Skew_Vertically() {
+    cout << "Please enter degree to skew up :";
     double angle;
     cin >> angle;
     angle = (angle * 22) / (180 * 7);
@@ -581,6 +584,7 @@ void Skew_verticaly() {
 
         }
     }
+
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; ++j) {
             image[i][j] = 255;
@@ -588,12 +592,11 @@ void Skew_verticaly() {
     }
     double step = SIZE - xx;
     double move = step / SIZE;
+    for (int j = 0; j < SIZE; ++j)
     {
         for (int i = 0; i < xx; i++){
-            for (int j = 0; j < SIZE; ++j){
                 image[i + (int) step][j] = image1[i][j];
-            }
-            step -= move;
         }
+        step -= move;
     }
 }
