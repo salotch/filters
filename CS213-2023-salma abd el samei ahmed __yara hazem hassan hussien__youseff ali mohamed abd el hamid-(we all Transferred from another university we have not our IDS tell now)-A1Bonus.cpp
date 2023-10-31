@@ -75,6 +75,18 @@ void doSomethingForImage() {
         invert_filter();
     else if(x=="3")
         merge();
+    else if (x=="4")
+    {
+        cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
+        char f;
+        cin >> f;
+        if (f=='h')
+            flip_image_horizontally();
+        else if (f=='v')
+            flip_image_vertically();
+    }
+    if(x=="5")
+        light_dark();
     else if(x=="6")
     {
         cout<<"Rotate (90), (180) or (270) degrees? ";
@@ -93,26 +105,25 @@ void doSomethingForImage() {
             rotate_90();
         }
     }
-    else if(x=="7")
-         edges();
+    else if (x=="7")
+        edges();
     else if(x=="8")
         Enlarge_image();
+    else if(x=="9")
+        shrink();
     else if(x=="b"||x=="B")
         Shuffle_image();
     else if(x=="e"||x=="E")
         Skew_Horizontally();
     else if(x=="f"||x=="F")
         Skew_Vertically();
-    else if(x=="c"||x=="C") {
+    else if(x=="c"||x=="C")
+    {
         blur();
         blur();
         blur();
         blur();
     }
-    else if(x=="9")
-       shrink();
-    if(x=="5")
-        light_dark();
     else if (x =="a")
     {
         char f;
@@ -127,26 +138,17 @@ void doSomethingForImage() {
         else if (f=='r')
             right_mirror();
     }
-    else if (x=="4")
-    {
-        cout << "Do you want to flip (h)orizontally or (v)ertically ?"<<endl;
-        char f;
-        cin >> f;
-        if (f=='h')
-            flip_image_horizontally();
-        else if (f=='v')
-            flip_image_vertically();
-    }
+
     else if (x=="d")
         crop_image();
-    else if (x=="7")
-        edges();
+
     else if(x=="s"||x=="S")
     {
         SAVE=false;
     }
     else if(x=="0")
-        EXIT=true;
+    { EXIT=true;
+        SAVE=false;}
 }
 void black_white()
 {
@@ -155,24 +157,16 @@ void black_white()
     {
         for(int j=0;j<SIZE;j++)
         {
+            int gray =0.3*image[i][j][0]+0.59*image[i][j][1]+0.11*image[i][j][2];
             for(int k=0;k<RGB;k++)
             {
-                av += image[i][j][k];
+                 image[i][j][k]=gray;
 
             }
-            av /=3;
-            for(int k=0;k<RGB;k++)
-            {
-                if(av<127)
-                    image[i][j][k]=0;
-                else
-                    image[i][j][k]=255;
-
-            }
-            av=0;
 
         }
     }
+
 }
 void invert_filter()
 {
@@ -588,7 +582,7 @@ void crop_image()
 }
 
 void edges() {
-
+    black_white();
     for (int i = 0; i < SIZE; ++i) {
         for (int j = 0; j < SIZE; ++j) {
             for (int k = 0; k < RGB; ++k) {
@@ -611,5 +605,4 @@ void edges() {
             }
         }
     }
-black_white();
 }
